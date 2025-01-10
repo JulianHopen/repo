@@ -15,18 +15,23 @@ app.set("view engine", "ejs");
 
 // Rute for hovedsiden (GET forespørsel)
 app.get("/", (req, res) => {
-    // Renders index.ejs-filen fra views-mappen
-    res.render("index");
+  // Renders index.ejs-filen fra views-mappen
+  res.render("index");
 });
 
+// Rute for hovedsiden (GET forespørsel)
+app.get("/signup", (req, res) => {
+  // Renders index.ejs-filen fra views-mappen
+  res.render("signup");
+});
 // Rute for å håndtere skjema innsending (POST forespørsel)
-app.post("/", (req, res) => {
-    const input = req.body.carType; // Henter data fra input-feltet med navnet "carType" i skjemaet
-    InsertCarInfoIntoDatabase(input); // Kaller funksjonen for å lagre data i databasen
-    return res.redirect("/"); // Omdirigerer brukeren tilbake til hovedsiden
+app.post("/signup", (req, res) => {
+  const input = req.body.carType; // Henter data fra input-feltet med navnet "carType" i skjemaet
+  InsertCarInfoIntoDatabase(input); // Kaller funksjonen for å lagre data i databasen
+  return res.redirect("/"); // Omdirigerer brukeren tilbake til hovedsiden
 });
 
 // Starter serveren og lytter på port 3000
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
