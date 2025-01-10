@@ -1,5 +1,3 @@
 # repo
 
-# repo
-
-Write something
+Class tutorial file
