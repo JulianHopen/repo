@@ -7,7 +7,7 @@ async function createConnection() {
     host: "localhost", // Angir databasen sin vert (her: localhost)
     user: "root", // Brukernavnet for å logge inn på databasen
     password: "Subscribe91", // Passordet for å logge inn på databasen
-    database: "cars", // Navnet på databasen som skal brukes
+    database: "login", // Navnet på databasen som skal brukes
   });
 }
 
