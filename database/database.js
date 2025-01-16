@@ -1,11 +1,12 @@
 const mysql = require("mysql2/promise");
+require("dotenv").config();
 
 async function createConnection() {
   return mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Subscribe91",
-    database: "login",
+    host: process.env.host,
+    user: process.env.dbuser,
+    password: process.env.dbpassword,
+    database: process.env.database,
   });
 }
 
