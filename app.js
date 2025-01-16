@@ -4,6 +4,8 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -20,7 +22,9 @@ app.get("/signup", (req, res) => {
 app.post("/signup", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  addUser(email, password);
+  bcrypt.hash(password, saltRounds, function (err, hashedPassword) {
+    addUser(email, hashedPassword);
+  });
   return res.redirect("/signup");
 });
 
