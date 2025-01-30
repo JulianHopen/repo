@@ -66,6 +66,7 @@ app.post("/login", async (req, res) => {
 
   if (auth) {
     req.session.email = auth.email;
+    req.session.value = auth.value;
     return res.redirect("/dashboard");
   }
   return res.redirect("/login");
@@ -83,6 +84,7 @@ function isAuthenticated(req, res, next) {
 app.get("/dashboard", isAuthenticated, (req, res) => {
   res.render("dashboard", {
     email: req.session.email,
+    value: req.session.value,
   });
 });
 

@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>index</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    />
   </head>
   <body>
     <!-- Header template -->
@@ -12,10 +15,14 @@
     <!-- Table structure -->
     <br />
     <br />
-    <div class="paragraph">
+    <div class="container">
       <br />
       <h1>Dashboard for user <%= email %></h1>
+      <br />
+      <h2>And my value is <%= value %></h2>
     </div>
+    <form action="post"><button></button></form>
+
     <!-- footer template -->
     <footer class="footer2"><%- include('partials/footer') %></footer>
   </body>

@@ -33,7 +33,7 @@ async function authenticateUser(email, password) {
   const match = await bcrypt.compare(password, user.password);
 
   if (match) {
-    return { success: true, email: user.email };
+    return { success: true, email: user.email, value: user.value };
   }
   connection.end();
 }
