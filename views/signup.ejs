@@ -1,6 +1,27 @@
-<h1>Signup</h1>
-<form method="post">
-  <input type="email" name="email" placeholder="email" />
-  <input type="password" name="password" placeholder="password" />
-  <button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>index</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Header template -->
+    <header><%- include('partials/header') %></header>
+    <!-- Table structure -->
+    <br />
+    <br />
+    <div class="paragraph">
+      <br />
+      <h1>Signup</h1>
+      <form method="post">
+        <input type="email" name="email" placeholder="email" />
+        <input type="password" name="password" placeholder="password" />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <!-- footer template -->
+    <footer class="footer2"><%- include('partials/footer') %></footer>
+  </body>
+</html>
