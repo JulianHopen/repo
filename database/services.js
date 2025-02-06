@@ -38,4 +38,14 @@ async function authenticateUser(email, password) {
   connection.end();
 }
 
-module.exports = { addUser, authenticateUser };
+async function deleteUser(email) {
+  const connection = await createConnection();
+
+  connection.connect();
+  const deleteUserQuery = "DELETE FROM user WHERE email = ?";
+  connection.execute(deleteUserQuery, [email]);
+
+  connection.end();
+}
+
+module.exports = { addUser, authenticateUser, deleteUser };

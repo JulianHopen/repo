@@ -1,4 +1,8 @@
-const { addUser, authenticateUser } = require("./database/services");
+const {
+  addUser,
+  authenticateUser,
+  deleteUser,
+} = require("./database/services");
 
 const express = require("express");
 const app = express();
@@ -68,7 +72,7 @@ app.post("/login", async (req, res) => {
     req.session.email = auth.email;
     req.session.value = auth.value;
     return res.redirect("/dashboard");
-  }
+  }``
   return res.redirect("/login");
 });
 
@@ -86,6 +90,17 @@ app.get("/dashboard", isAuthenticated, (req, res) => {
     email: req.session.email,
     value: req.session.value,
   });
+});
+
+app.post("/dashboard/logout", isAuthenticated, (req, res) => {
+  req.session.destroy();
+  res.redirect("/login");
+});
+
+app.post("/dashboard/delete", isAuthenticated, (req, res) => {
+  deleteUser(req.session.email);
+  req.session.destroy();
+  res.redirect("/login");
 });
 
 app.listen(port, () => {

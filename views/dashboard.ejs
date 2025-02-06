@@ -21,7 +21,20 @@
       <br />
       <h2>And my value is <%= value %></h2>
     </div>
-    <form action="post"><button></button></form>
+    <form
+      class="form has-text-centered"
+      method="post"
+      action="/dashboard/logout"
+    >
+      <button class="button is-info is-outlined" type="submit">Logout</button>
+    </form>
+    <form
+      class="form has-text-centered"
+      method="post"
+      action="/dashboard/delete"
+    >
+      <button class="button is-info is-outlined" type="submit">Delete</button>
+    </form>
 
     <!-- footer template -->
     <footer class="footer2"><%- include('partials/footer') %></footer>
