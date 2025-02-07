@@ -5,12 +5,14 @@ const {
 } = require("./database/services");
 
 const express = require("express");
+const expressLayouts = require("express-ejs-layouts");
 const app = express();
 const port = 3000;
 const bodyParser = require("body-parser");
 const validator = require("validator");
 const session = require("express-session");
 
+app.use(expressLayouts);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
@@ -24,15 +26,24 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("index");
+  const locals = {
+    title: "Homepage",
+  };
+  res.render("index", locals);
 });
 
 app.get("/signup", (req, res) => {
-  res.render("signup");
+  const locals = {
+    title: "Signup",
+  };
+  res.render("signup", locals);
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  const locals = {
+    title: "Login",
+  };
+  res.render("login", locals);
 });
 
 app.post("/signup", async (req, res) => {
@@ -72,7 +83,7 @@ app.post("/login", async (req, res) => {
     req.session.email = auth.email;
     req.session.value = auth.value;
     return res.redirect("/dashboard");
-  }``
+  }
   return res.redirect("/login");
 });
 
@@ -87,12 +98,13 @@ function isAuthenticated(req, res, next) {
 
 app.get("/dashboard", isAuthenticated, (req, res) => {
   res.render("dashboard", {
+    title: "Dashboard",
     email: req.session.email,
     value: req.session.value,
   });
 });
 
-app.post("/dashboard/logout", isAuthenticated, (req, res) => {
+app.post("/logout", isAuthenticated, (req, res) => {
   req.session.destroy();
   res.redirect("/login");
 });
