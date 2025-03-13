@@ -1,0 +1,31 @@
+<div class="container">
+  <br />
+  <h1>Dashboard for user <%= email %></h1>
+  <br />
+  <h2>And my value is <%= value %></h2>
+</div>
+<form class="form has-text-centered" method="post" action="/logout">
+  <button class="button is-info is-outlined mt-1" type="submit">Logout</button>
+</form>
+<form class="form has-text-centered" method="post" action="/dashboard/delete">
+  <button class="button is-info is-outlined mt-1" type="submit">Delete</button>
+</form>
+<div class="container">
+  <% if (userLevel === 1) { %>
+  <p>You're a standard user</p>
+  <% } %> <% if (userLevel === 2) { %>
+  <p>You're an admin</p>
+  <% } %>
+</div>
+<br />
+<br /><br />
+<div class="columns is-multiline">
+  <% display.forEach(function(result){ %>
+  <div class="column">
+    <div class="box"><%= result.email %></div>
+    <div class="box py-3"><%= result.password %></div>
+    <hr />
+  </div>
+
+  <% }) %>
+</div>

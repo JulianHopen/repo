@@ -2,7 +2,10 @@ const {
   addUser,
   authenticateUser,
   deleteUser,
+  allData,
 } = require("./database/services");
+
+const { isAuthenticated } = require("./middleware/authenticate");
 
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
@@ -28,6 +31,7 @@ app.use(
 app.get("/", (req, res) => {
   const locals = {
     title: "Homepage",
+    userLevel: req.session.userLevel,
   };
   res.render("index", locals);
 });
@@ -35,6 +39,7 @@ app.get("/", (req, res) => {
 app.get("/signup", (req, res) => {
   const locals = {
     title: "Signup",
+    userLevel: req.session.userLevel,
   };
   res.render("signup", locals);
 });
@@ -42,6 +47,7 @@ app.get("/signup", (req, res) => {
 app.get("/login", (req, res) => {
   const locals = {
     title: "Login",
+    userLevel: req.session.userLevel,
   };
   res.render("login", locals);
 });
@@ -82,25 +88,36 @@ app.post("/login", async (req, res) => {
   if (auth) {
     req.session.email = auth.email;
     req.session.value = auth.value;
-    return res.redirect("/dashboard");
+    req.session.userLevel = auth.userLevel;
+
+    if (req.session.userLevel === 1) {
+      return res.redirect("/dashboard");
+    }
+    if (req.session.userLevel === 2) {
+      return res.redirect("/dashboard-admin");
+    }
+    // console.log(req.session.userLevel);
   }
   return res.redirect("/login");
 });
-
-function isAuthenticated(req, res, next) {
-  if (req.session.email) {
-    next();
-  } else {
-    req.session.error = "Access denied!";
-    res.redirect("/login");
-  }
-}
 
 app.get("/dashboard", isAuthenticated, (req, res) => {
   res.render("dashboard", {
     title: "Dashboard",
     email: req.session.email,
     value: req.session.value,
+    userLevel: req.session.userLevel,
+  });
+});
+
+app.get("/dashboard-admin", isAuthenticated, async (req, res) => {
+  const retrieveData = await allData();
+  res.render("admindash", {
+    title: "Admindash",
+    display: retrieveData,
+    email: req.session.email,
+    value: req.session.value,
+    userLevel: req.session.userLevel,
   });
 });
 

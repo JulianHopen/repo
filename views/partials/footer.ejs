@@ -1,6 +1,9 @@
 <!-- Basic footer template-->
+<% userLevel%>
 <div class="is-flex is-justify-content-center is-align-items-end mb-3">
-  Copyright <a class="hidelink has-text-info" href="/dashboard">©</a>
+  <% if (!userLevel) { %> Copyright <a class="hidelink has-text-info" href="/dashboard">©</a></a> <% } %> 
+  <% if (userLevel === 1) { %> Copyright <a class="hidelink has-text-info" href="/dashboard">©</a></a> <% } %> 
+  <% if (userLevel === 2) { %> Copyright <a class="hidelink has-text-info" href="/dashboard-admin">©</a></a> <% } %> 
   <script>
     document.write(new Date().getFullYear());
   </script>

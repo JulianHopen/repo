@@ -2,12 +2,23 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { createConnection } = require("./database");
 
+async function allData() {
+  const connection = await createConnection();
+
+  connection.connect();
+
+  const query = "SELECT * FROM `login`.`user`";
+  const [rows] = await connection.execute(query);
+
+  return rows;
+}
+
 async function addUser(email, password) {
   const connection = await createConnection();
 
   connection.connect();
 
-  const FindUserQuery = "SELECT * FROM user WHERE email = ?;";
+  const FindUserQuery = "SELECT * FROM user WHERE email = ?";
   const [rows] = await connection.execute(FindUserQuery, [email]);
   const user = await rows[0];
 
@@ -30,10 +41,19 @@ async function authenticateUser(email, password) {
   const [rows] = await connection.execute(query, [email]);
   const user = await rows[0];
 
+  if (rows.length === 0) {
+    connection.end();
+    return false;
+  }
   const match = await bcrypt.compare(password, user.password);
-
+  // console.log(user);
   if (match) {
-    return { success: true, email: user.email, value: user.value };
+    return {
+      success: true,
+      email: user.email,
+      value: user.value,
+      userLevel: user.user_level,
+    };
   }
   connection.end();
 }
@@ -48,4 +68,4 @@ async function deleteUser(email) {
   connection.end();
 }
 
-module.exports = { addUser, authenticateUser, deleteUser };
+module.exports = { addUser, authenticateUser, deleteUser, allData };
