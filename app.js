@@ -5,7 +5,7 @@ const {
   allData,
 } = require("./database/services");
 
-const { isAuthenticated } = require("./middleware/authMiddleware");
+const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
 
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
@@ -110,10 +110,10 @@ app.get("/dashboard", isAuthenticated, (req, res) => {
   });
 });
 
-app.get("/dashboard-admin", isAuthenticated, async (req, res) => {
+app.get("/dashboard-admin", isAuthenticated, isAdmin, async (req, res) => {
   const retrieveData = await allData();
   res.render("admindash", {
-    title: "Admindash",
+    title: "Admin dashboard",
     display: retrieveData,
     email: req.session.email,
     value: req.session.value,

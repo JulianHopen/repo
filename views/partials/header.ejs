@@ -1,16 +1,73 @@
-<!-- Basic navigation bar template -->
-<div>
-  <nav>
-    <ul class="m-2">
-      <li class="is-inline px-2">
-        <a class="has-text-info" href="/">Home</a>
-      </li>
-      <li class="is-inline px-2"">
-        <a class="has-text-info" href="/signup">Sign up</a>
-      </li>
-      <li class="is-inline px-2"">
-        <a class="has-text-info" href="/login">Login</a>
-      </li>
-    </ul>
-  </nav>
-</div>
+
+<% userLevel%>
+<nav class="navbar">
+  <div>
+    <a class="navbar-item" href="/">
+      <svg
+        class="m-1"
+        width="640"
+        height="220"
+        fill="none"
+      ></svg>
+    </a>
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="/">Home </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link"> More </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="/signup"> Sign up </a>
+          <a class="navbar-item" href="/Login"> Login </a>
+          <% if (userLevel === "user") { %><a class="navbar-item" href="/dashboard">Dashboard</a></a> <% } %> 
+          <% if (userLevel === "admin") { %><a class="navbar-item" href="/dashboard-admin">Dashboard</a></a> <% } %> 
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <% if (!userLevel) { %><a
+            class="button is-info is-outlined mt-1"
+            href="/signup"
+          >
+            <strong>Sign up</strong>
+          </a>
+          <% } %> <% if (userLevel === "user") { %>
+          <form class="form has-text-centered" method="post" action="/logout">
+            <button class="button is-info is-outlined mt-1" type="submit">
+              Log out
+            </button>
+          </form>
+          <% } %> <% if (userLevel === "admin") { %>
+          <form class="form has-text-centered" method="post" action="/logout">
+            <button class="button is-info is-outlined mt-1" type="submit">
+              Log out
+            </button>
+          </form>
+          <% } %> <% if (!userLevel) { %><a
+            class="button is-info is-outlined mt-1"
+            href="/login"
+          >
+            <strong>Log in</strong>
+          </a>
+          <% } %> <% if (userLevel === "user") { %><a
+            class="button is-info is-outlined mt-1"
+            href="/dashboard"
+            >Dashboard</a
+          >
+          <% } %> <% if (userLevel === "admin") { %><a
+            class="button is-info is-outlined mt-1"
+            href="/dashboard-admin"
+            >Dashboard</a
+          >
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

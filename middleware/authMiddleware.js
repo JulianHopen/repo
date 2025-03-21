@@ -7,4 +7,12 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-module.exports = { isAuthenticated };
+function isAdmin(req, res, next) {
+  if (req.session.userLevel === "admin") {
+    next();
+  } else {
+    req.session.error = "Access denied!";
+    res.redirect("/login");
+  }
+}
+module.exports = { isAuthenticated, isAdmin };

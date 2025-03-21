@@ -11989,7 +11989,7 @@ button.tag:active,
     var(--bulma-text-weak-l),
     0.3
   );
-  --bulma-input-arrow: var(--bulma-link);
+  --bulma-input-arrow: var(--bulma-text);
   --bulma-input-icon-color: var(--bulma-text-light);
   --bulma-input-icon-hover-color: var(--bulma-text-weak);
   --bulma-input-icon-focus-color: var(--bulma-link);
@@ -14026,7 +14026,7 @@ button.dropdown-item.is-selected {
   --bulma-navbar-dropdown-border-style: solid;
   --bulma-navbar-dropdown-border-width: 0.125em;
   --bulma-navbar-dropdown-offset: -0.25em;
-  --bulma-navbar-dropdown-arrow: var(--bulma-link);
+  --bulma-navbar-dropdown-arrow: var(--bulma-info);
   --bulma-navbar-dropdown-radius: var(--bulma-radius-large);
   --bulma-navbar-dropdown-z: 20;
   --bulma-navbar-dropdown-boxed-radius: var(--bulma-radius-large);

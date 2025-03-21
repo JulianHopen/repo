@@ -19,7 +19,7 @@
 </div>
 <br />
 <br /><br />
-<div class="columns is-multiline">
+<!-- <div class="columns is-multiline">
   <% display.forEach(function(result){ %>
   <div class="column">
     <div class="box py-3"><%= result.email %></div>
@@ -30,7 +30,7 @@
   </div>
 
   <% }) %>
-</div>
+</div> -->
 
 <div>
   <table class="table">
@@ -38,6 +38,7 @@
       <th>Email</th>
       <th>Password</th>
       <th>Value</th>
+      <th>User level</th>
     </thead>
     <!-- Table data taking the stored data and sorting it with forEach and displaying based on the parameter and the corresponding database colomn name -->
     <tr>
@@ -45,7 +46,9 @@
       <td><%= result.email %></td>
       <td><%= result.password %></td>
       <td><%= result.value %></td>
+      <td><%= result.user_level %></td>
     </tr>
     <% }) %>
   </table>
 </div>
+<br /><br /><br />
