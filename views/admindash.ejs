@@ -11,9 +11,9 @@
   <button class="button is-info is-outlined mt-1" type="submit">Delete</button>
 </form>
 <div class="container">
-  <% if (userLevel === 1) { %>
+  <% if (userLevel === "user") { %>
   <p>You're a standard user</p>
-  <% } %> <% if (userLevel === 2) { %>
+  <% } %> <% if (userLevel === "admin") { %>
   <p>You're an admin</p>
   <% } %>
 </div>
@@ -22,10 +22,30 @@
 <div class="columns is-multiline">
   <% display.forEach(function(result){ %>
   <div class="column">
-    <div class="box"><%= result.email %></div>
+    <div class="box py-3"><%= result.email %></div>
     <div class="box py-3"><%= result.password %></div>
+    <div class="box py-3"><%= result.value %></div>
+    <div class="box py-3"><%= result.user_level %></div>
     <hr />
   </div>
 
   <% }) %>
+</div>
+
+<div>
+  <table class="table">
+    <thead>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Value</th>
+    </thead>
+    <!-- Table data taking the stored data and sorting it with forEach and displaying based on the parameter and the corresponding database colomn name -->
+    <tr>
+      <% display.forEach(function(result){ %>
+      <td><%= result.email %></td>
+      <td><%= result.password %></td>
+      <td><%= result.value %></td>
+    </tr>
+    <% }) %>
+  </table>
 </div>

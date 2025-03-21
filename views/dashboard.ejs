@@ -18,9 +18,9 @@
     </button>
   </form>
   <div class="container">
-    <% if (userLevel === 1) { %>
+    <% if (userLevel === "user") { %>
     <p>You're a standard user</p>
-    <% } %> <% if (userLevel === 2) { %>
+    <% } %> <% if (userLevel === "admin") { %>
     <p>You're an admin</p>
     <% } %>
   </div>

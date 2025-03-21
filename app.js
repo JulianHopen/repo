@@ -5,7 +5,7 @@ const {
   allData,
 } = require("./database/services");
 
-const { isAuthenticated } = require("./middleware/authenticate");
+const { isAuthenticated } = require("./middleware/authMiddleware");
 
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
@@ -90,10 +90,10 @@ app.post("/login", async (req, res) => {
     req.session.value = auth.value;
     req.session.userLevel = auth.userLevel;
 
-    if (req.session.userLevel === 1) {
+    if (req.session.userLevel === "user") {
       return res.redirect("/dashboard");
     }
-    if (req.session.userLevel === 2) {
+    if (req.session.userLevel === "admin") {
       return res.redirect("/dashboard-admin");
     }
     // console.log(req.session.userLevel);

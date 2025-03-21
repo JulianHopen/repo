@@ -25,9 +25,13 @@ async function addUser(email, password) {
   if (user) {
     return false;
   }
-  const addUserQuery = "INSERT INTO user (email, password) VALUES (?,?)";
+
+  const DefaultuserLevel = "user";
+
+  const addUserQuery =
+    "INSERT INTO user (email, password, userLevel) VALUES (?,?,?)";
   const hashedPassword = bcrypt.hashSync(password, saltRounds);
-  connection.execute(addUserQuery, [email, hashedPassword]);
+  connection.execute(addUserQuery, [email, hashedPassword, DefaultuserLevel]);
 
   connection.end();
   return true;
