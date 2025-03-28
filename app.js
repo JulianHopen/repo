@@ -146,7 +146,8 @@ app.post("/support", isAuthenticated, async (req, res) => {
 });
 
 app.get("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
-  const data = await allTickets();
+  const input = req.body.email;
+  const data = await allTickets(input);
   res.render("adminsupport", {
     title: "Admin support panel",
     display: data,
