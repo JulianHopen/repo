@@ -4,6 +4,7 @@ const {
   deleteUser,
   allData,
   userRequest,
+  allTickets,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -54,8 +55,7 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const { email, password } = req.body;
 
   const strongPassword = validator.isStrongPassword(password, {
     minLength: 3,
@@ -81,8 +81,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const { email, password } = req.body;
 
   const auth = await authenticateUser(email, password);
 
@@ -144,6 +143,17 @@ app.post("/support", isAuthenticated, async (req, res) => {
   const { userRef, email } = req.session;
   await userRequest(supportTicket, userRef, email);
   res.redirect("/dashboard");
+});
+
+app.get("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
+  const data = await allTickets();
+  res.render("adminsupport", {
+    title: "Admin support panel",
+    display: data,
+    email: req.session.email,
+    userRef: req.session.userRef,
+    userLevel: req.session.userLevel,
+  });
 });
 
 app.listen(port, () => {

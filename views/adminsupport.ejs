@@ -1,0 +1,17 @@
+<div class="container">
+  <br />
+  <h1 class="title">Admin support panel overview</h1>
+  <br />
+</div>
+<br />
+<div class="columns is-multiline">
+  <% display.forEach(function(result){ %>
+  <div class="column">
+    <div class="box py-4 mx-3"><%= result.text %></div>
+
+    <div class="box py-4 mx-3"><%= result.email %></div>
+    <hr />
+  </div>
+
+  <% }) %>
+</div>

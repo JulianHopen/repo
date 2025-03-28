@@ -13,6 +13,17 @@ async function allData() {
   return rows;
 }
 
+async function allTickets() {
+  const connection = await createConnection();
+
+  connection.connect();
+
+  const query = "SELECT * FROM `login`.`user_request`";
+  const [rows] = await connection.execute(query);
+
+  return rows;
+}
+
 async function addUser(email, password) {
   const connection = await createConnection();
 
@@ -29,7 +40,7 @@ async function addUser(email, password) {
   const DefaultuserLevel = "user";
 
   const addUserQuery =
-    "INSERT INTO user (email, password, userLevel) VALUES (?,?,?)";
+    "INSERT INTO user (email, password, user_level) VALUES (?,?,?)";
   const hashedPassword = bcrypt.hashSync(password, saltRounds);
   connection.execute(addUserQuery, [email, hashedPassword, DefaultuserLevel]);
 
@@ -90,4 +101,5 @@ module.exports = {
   deleteUser,
   allData,
   userRequest,
+  allTickets,
 };
