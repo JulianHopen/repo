@@ -3,6 +3,7 @@ const {
   authenticateUser,
   deleteUser,
   allData,
+  userRequest,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -87,7 +88,7 @@ app.post("/login", async (req, res) => {
 
   if (auth) {
     req.session.email = auth.email;
-    req.session.value = auth.value;
+    req.session.userRef = auth.userRef;
     req.session.userLevel = auth.userLevel;
 
     if (req.session.userLevel === "user") {
@@ -105,7 +106,7 @@ app.get("/dashboard", isAuthenticated, (req, res) => {
   res.render("dashboard", {
     title: "Dashboard",
     email: req.session.email,
-    value: req.session.value,
+    userRef: req.session.userRef,
     userLevel: req.session.userLevel,
   });
 });
@@ -116,7 +117,7 @@ app.get("/dashboard-admin", isAuthenticated, isAdmin, async (req, res) => {
     title: "Admin dashboard",
     display: retrieveData,
     email: req.session.email,
-    value: req.session.value,
+    userRef: req.session.userRef,
     userLevel: req.session.userLevel,
   });
 });
@@ -130,6 +131,19 @@ app.post("/dashboard/delete", isAuthenticated, (req, res) => {
   deleteUser(req.session.email);
   req.session.destroy();
   res.redirect("/login");
+});
+
+app.get("/support", isAuthenticated, (req, res) => {
+  res.render("support", {
+    title: "Support",
+    userLevel: req.session.userLevel,
+  });
+});
+app.post("/support", isAuthenticated, async (req, res) => {
+  const supportTicket = req.body.userRequest;
+  const { userRef, email } = req.session;
+  await userRequest(supportTicket, userRef, email);
+  res.redirect("/dashboard");
 });
 
 app.listen(port, () => {

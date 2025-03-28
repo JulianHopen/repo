@@ -57,6 +57,7 @@ async function authenticateUser(email, password) {
       email: user.email,
       value: user.value,
       userLevel: user.user_level,
+      userRef: user.user_ref,
     };
   }
   connection.end();
@@ -72,4 +73,21 @@ async function deleteUser(email) {
   connection.end();
 }
 
-module.exports = { addUser, authenticateUser, deleteUser, allData };
+async function userRequest(supportTicket, userRef, email) {
+  const connection = await createConnection();
+
+  connection.connect();
+  const addUserQuery = "INSERT INTO user_request (text, email) VALUES (?, ?)";
+  connection.execute(addUserQuery, [supportTicket, email]);
+
+  connection.end();
+  return true;
+}
+
+module.exports = {
+  addUser,
+  authenticateUser,
+  deleteUser,
+  allData,
+  userRequest,
+};

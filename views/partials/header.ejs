@@ -21,7 +21,8 @@
 
         <div class="navbar-dropdown">
           <a class="navbar-item" href="/signup"> Sign up </a>
-          <a class="navbar-item" href="/Login"> Login </a>
+          <a class="navbar-item" href="/login"> Login </a>
+          <% if (userLevel === "user") { %><a class="navbar-item" href="/support">Support</a></a> <% } %> 
           <% if (userLevel === "user") { %><a class="navbar-item" href="/dashboard">Dashboard</a></a> <% } %> 
           <% if (userLevel === "admin") { %><a class="navbar-item" href="/dashboard-admin">Dashboard</a></a> <% } %> 
         </div>

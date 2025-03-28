@@ -2,13 +2,11 @@
   <br />
   <h1>Dashboard for user <%= email %></h1>
   <br />
-  <h2>And my value is <%= value %></h2>
 </div>
-<form class="form has-text-centered" method="post" action="/logout">
-  <button class="button is-info is-outlined mt-1" type="submit">Logout</button>
-</form>
 <form class="form has-text-centered" method="post" action="/dashboard/delete">
-  <button class="button is-info is-outlined mt-1" type="submit">Delete</button>
+  <button class="button is-info is-outlined mt-1" type="submit">
+    Delete user
+  </button>
 </form>
 <div class="container">
   <% if (userLevel === "user") { %>
@@ -24,7 +22,7 @@
   <div class="column">
     <div class="box py-3"><%= result.email %></div>
     <div class="box py-3"><%= result.password %></div>
-    <div class="box py-3"><%= result.value %></div>
+    <div class="box py-3"><%= result.user_ref %></div>
     <div class="box py-3"><%= result.user_level %></div>
     <hr />
   </div>
@@ -33,11 +31,11 @@
 </div> -->
 
 <div>
-  <table class="table">
+  <table class="table is-bordered is-hoverable">
     <thead>
       <th>Email</th>
       <th>Password</th>
-      <th>Value</th>
+      <th>User ref</th>
       <th>User level</th>
     </thead>
     <!-- Table data taking the stored data and sorting it with forEach and displaying based on the parameter and the corresponding database colomn name -->
@@ -45,7 +43,7 @@
       <% display.forEach(function(result){ %>
       <td><%= result.email %></td>
       <td><%= result.password %></td>
-      <td><%= result.value %></td>
+      <td><%= result.user_ref %></td>
       <td><%= result.user_level %></td>
     </tr>
     <% }) %>
