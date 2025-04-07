@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const crypto = require("crypto");
 const { createConnection } = require("./database");
+
+const saltRounds = 10;
 
 async function allData() {
   const connection = await createConnection();
@@ -27,6 +29,8 @@ async function allTickets() {
 async function addUser(email, password) {
   const connection = await createConnection();
 
+  const randomBytes = crypto.randomBytes(32);
+  const md5Hash = crypto.createHash("md5").update(randomBytes).digest("hex");
   connection.connect();
 
   const FindUserQuery = "SELECT * FROM user WHERE email = ?";
@@ -36,13 +40,18 @@ async function addUser(email, password) {
   if (user) {
     return false;
   }
-
+  const hashedPassword = await bcrypt.hashSync(password, saltRounds);
+  const userRef = md5Hash;
   const DefaultuserLevel = "user";
 
   const addUserQuery =
     "INSERT INTO user (email, password, user_level) VALUES (?,?,?)";
-  const hashedPassword = bcrypt.hashSync(password, saltRounds);
-  connection.execute(addUserQuery, [email, hashedPassword, DefaultuserLevel]);
+  connection.execute(addUserQuery, [
+    email,
+    hashedPassword,
+    userRef,
+    DefaultuserLevel,
+  ]);
 
   connection.end();
   return true;
