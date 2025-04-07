@@ -15,6 +15,16 @@ async function allData() {
   return rows;
 }
 
+async function displayRequest(requestedEmail) {
+  const connection = await createConnection();
+
+  connection.connect();
+  const query = "SELECT * FROM `login`.`user_request` WHERE email = ?";
+  const [rows] = await connection.execute(query, [requestedEmail]);
+  connection.end();
+  return rows;
+}
+
 async function allTickets() {
   const connection = await createConnection();
 
@@ -45,7 +55,7 @@ async function addUser(email, password) {
   const DefaultuserLevel = "user";
 
   const addUserQuery =
-    "INSERT INTO user (email, password, user_level) VALUES (?,?,?)";
+    "INSERT INTO user (email, password, user_ref, user_level) VALUES (?,?,?,?)";
   connection.execute(addUserQuery, [
     email,
     hashedPassword,
@@ -111,4 +121,5 @@ module.exports = {
   allData,
   userRequest,
   allTickets,
+  displayRequest,
 };

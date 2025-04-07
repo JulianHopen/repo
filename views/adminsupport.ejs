@@ -1,25 +1,25 @@
-<div class="container">
+<section>
+  <br />
+  <br />
+  <div class="container">
   <br />
   <h1 class="title">Admin support panel overview</h1>
-  <br />
-</div>
-<div class="form">
-  <input
-    class="input"
-    type="email"
-    name="email"
-    placeholder="Search by user email"
-  />
-</div>
-<br />
-<div class="columns is-multiline">
-  <% display.forEach(function(result){ %>
-  <div class="column">
-    <div class="box py-4 mx-3"><%= result.text %></div>
-
-    <div class="box py-4 mx-3"><%= result.email %></div>
-    <hr />
+  <form class="form" method="post">
+    <input class="input" type="email" name="requestedEmail" placeholder="Email" />
+    <button class="button is-info is-outlined mt-1 is-inline" type="submit">
+      Submit
+    </button>
+  </form>
+<br><br>
+  <div class="columns is-multiline">
+    <% display.forEach(function(result){ %>
+    <div class="column">
+      <div class="box py-4 mx-3"><%= result.text %></div>
+  
+      <div class="box py-4 mx-3"><%= result.email %></div>
+      <hr />
+    </div>
+  
+    <% }) %>
   </div>
-
-  <% }) %>
-</div>
+</section>

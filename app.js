@@ -5,6 +5,7 @@ const {
   allData,
   userRequest,
   allTickets,
+  displayRequest,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -84,7 +85,6 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const auth = await authenticateUser(email, password);
-
   if (auth) {
     req.session.email = auth.email;
     req.session.userRef = auth.userRef;
@@ -101,9 +101,11 @@ app.post("/login", async (req, res) => {
   return res.redirect("/login");
 });
 
-app.get("/dashboard", isAuthenticated, (req, res) => {
+app.get("/dashboard", isAuthenticated, async (req, res) => {
+  const request = await displayRequest(req.session.email);
   res.render("dashboard", {
     title: "Dashboard",
+    display: request,
     email: req.session.email,
     userRef: req.session.userRef,
     userLevel: req.session.userLevel,
@@ -146,8 +148,8 @@ app.post("/support", isAuthenticated, async (req, res) => {
 });
 
 app.get("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
-  const input = req.body.email;
-  const data = await allTickets(input);
+  let requestedEmail = null;
+  const data = await displayRequest(requestedEmail);
   res.render("adminsupport", {
     title: "Admin support panel",
     display: data,
@@ -157,6 +159,12 @@ app.get("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
   });
 });
 
+app.post("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
+  const { requestedEmail } = req.body;
+  await displayRequest(requestedEmail);
+  console.log(requestedEmail);
+  res.redirect("/support-admin");
+});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

@@ -6,16 +6,36 @@
     <h1 class="title">Dashboard for user <%= email %></h1>
     <br />
   </div>
-  <form class="form has-text-centered" method="post" action="/dashboard/delete">
-    <button class="button is-info is-outlined mt-1" type="submit">
-      Delete user
-    </button>
-  </form>
-  <div class="container">
-    <% if (userLevel === "user") { %>
-    <p>You're a standard user</p>
-    <% } %> <% if (userLevel === "admin") { %>
-    <p>You're an admin</p>
-    <% } %>
+
+  <div class="columns is-centered">
+    <form
+      class="form has-text-centered is-inline mx-1"
+      method="get"
+      action="/support"
+    >
+      <button class="button is-info is-outlined mt-1" type="submit">
+        Go to support
+      </button>
+    </form>
+    <form
+      class="form has-text-centered is-inline mx-1"
+      method="post"
+      action="/dashboard/delete"
+    >
+      <button class="button is-info is-outlined mt-1" type="submit">
+        Delete user
+      </button>
+    </form>
+  </div>
+  <br />
+  <div class="columns is-multiline">
+    <% display.forEach(function(result){ %>
+    <div class="column">
+      <div class="box py-4 mx-3"><%= result.text %></div>
+      <hr />
+    </div>
+
+    <% }) %>
   </div>
 </section>
+<br /><br />
