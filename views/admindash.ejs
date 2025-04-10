@@ -2,12 +2,29 @@
   <br />
   <h1 class="title">Dashboard for user <%= email %></h1>
   <br />
+
+  <div class="columns is-centered">
+    <form
+      class="form has-text-centered is-inline mx-1"
+      method="get"
+      action="/support-admin"
+    >
+      <button class="button is-info is-outlined mt-1" type="submit">
+        Go to support
+      </button>
+    </form>
+    <form
+      class="form has-text-centered is-inline mx-1"
+      method="post"
+      action="/dashboard/delete"
+    >
+      <button class="button is-info is-outlined mt-1" type="submit">
+        Delete user
+      </button>
+    </form>
+  </div>
 </div>
-<form class="form has-text-centered" method="post" action="/dashboard/delete">
-  <button class="button is-info is-outlined mt-1" type="submit">
-    Delete user
-  </button>
-</form>
+
 <div class="container">
   <% if (userLevel === "user") { %>
   <p>You're a standard user</p>
@@ -45,6 +62,11 @@
       <td><%= result.password %></td>
       <td><%= result.user_ref %></td>
       <td><%= result.user_level %></td>
+      <td>
+        <form method="post" action="/dashboard/delete/<%= result.user_ref %>">
+          <button class="button" type="submit">Delete this account</button>
+        </form>
+      </td>
     </tr>
     <% }) %>
   </table>

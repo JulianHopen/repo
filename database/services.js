@@ -15,6 +15,13 @@ async function allData() {
   return rows;
 }
 
+async function findUserByEmail(email) {
+  const connection = await createConnection();
+  const query = "SELECT * FROM user WHERE email = ?";
+  const [rows] = await connection.execute(query, [email]);
+  return rows[0];
+}
+
 async function displayRequest(requestedEmail) {
   const connection = await createConnection();
 

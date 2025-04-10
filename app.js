@@ -148,8 +148,7 @@ app.post("/support", isAuthenticated, async (req, res) => {
 });
 
 app.get("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
-  let requestedEmail = null;
-  const data = await displayRequest(requestedEmail);
+  const data = await allTickets();
   res.render("adminsupport", {
     title: "Admin support panel",
     display: data,
@@ -160,9 +159,8 @@ app.get("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
 });
 
 app.post("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
-  const { requestedEmail } = req.body;
-  await displayRequest(requestedEmail);
-  console.log(requestedEmail);
+  const { email } = req.body;
+  console.log(email);
   res.redirect("/support-admin");
 });
 app.listen(port, () => {

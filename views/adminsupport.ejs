@@ -5,18 +5,19 @@
   <br />
   <h1 class="title">Admin support panel overview</h1>
   <form class="form" method="post">
-    <input class="input" type="email" name="requestedEmail" placeholder="Email" />
+    <input class="input" type="email" name="email" placeholder="Email" />
     <button class="button is-info is-outlined mt-1 is-inline" type="submit">
       Submit
     </button>
   </form>
 <br><br>
-  <div class="columns is-multiline">
+  <div class="columns">
     <% display.forEach(function(result){ %>
-    <div class="column">
-      <div class="box py-4 mx-3"><%= result.text %></div>
-  
-      <div class="box py-4 mx-3"><%= result.email %></div>
+    <div class="column"><div class="box">
+      <a href="mailto:<%= result.email %>">
+        <p> <%= result.email %>
+        <br><br>
+            <%= result.text %></p></div></a>
       <hr />
     </div>
   
