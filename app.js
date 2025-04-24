@@ -6,6 +6,7 @@ const {
   userRequest,
   allTickets,
   displayRequest,
+  removeUserByRef,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -93,6 +94,9 @@ app.post("/login", async (req, res) => {
     if (req.session.userLevel === "user") {
       return res.redirect("/dashboard");
     }
+    if (req.session.userLevel === "request") {
+      return res.redirect("/dashboard");
+    }
     if (req.session.userLevel === "admin") {
       return res.redirect("/dashboard-admin");
     }
@@ -116,10 +120,21 @@ app.get("/dashboard-admin", isAuthenticated, isAdmin, async (req, res) => {
   const retrieveData = await allData();
   res.render("admindash", {
     title: "Admin dashboard",
-    display: retrieveData,
     email: req.session.email,
     userRef: req.session.userRef,
     userLevel: req.session.userLevel,
+    display: retrieveData,
+  });
+});
+
+app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
+  const retrieveData = await allData();
+  res.render("search", {
+    title: "Search",
+    email: req.session.email,
+    userRef: req.session.userRef,
+    userLevel: req.session.userLevel,
+    display: retrieveData,
   });
 });
 
@@ -128,10 +143,17 @@ app.post("/logout", isAuthenticated, (req, res) => {
   res.redirect("/login");
 });
 
-app.post("/dashboard/delete", isAuthenticated, (req, res) => {
+app.post("/dashboard/delete", isAuthenticated, async (req, res) => {
   deleteUser(req.session.email);
   req.session.destroy();
   res.redirect("/login");
+});
+
+app.post("/dashboard/delete/:userRef", isAuthenticated, async (req, res) => {
+  const { userRef } = req.params;
+
+  await removeUserByRef(userRef);
+  res.redirect("/dashboard-admin");
 });
 
 app.get("/support", isAuthenticated, (req, res) => {
@@ -144,6 +166,8 @@ app.post("/support", isAuthenticated, async (req, res) => {
   const supportTicket = req.body.userRequest;
   const { userRef, email } = req.session;
   await userRequest(supportTicket, userRef, email);
+
+  req.session.userLevel = "request";
   res.redirect("/dashboard");
 });
 

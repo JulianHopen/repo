@@ -23,9 +23,12 @@
           <a class="navbar-item" href="/signup"> Sign up </a>
           <a class="navbar-item" href="/login"> Login </a>
           <% if (userLevel === "user") { %><a class="navbar-item" href="/support">Support</a></a> <% } %> 
-          <% if (userLevel === "admin") { %><a class="navbar-item" href="/support-admin">Support</a></a> <% } %> 
+          <% if (userLevel === "request") { %><a class="navbar-item" href="/support">Support</a></a> <% } %> 
+          <% if (userLevel === "admin" ) { %><a class="navbar-item" href="/support-admin">Support</a></a> <% } %> 
           <% if (userLevel === "user") { %><a class="navbar-item" href="/dashboard">Dashboard</a></a> <% } %> 
+          <% if (userLevel === "request") { %><a class="navbar-item" href="/dashboard">Dashboard</a></a> <% } %> 
           <% if (userLevel === "admin") { %><a class="navbar-item" href="/dashboard-admin">Dashboard</a></a> <% } %> 
+          <% if (userLevel === "admin") { %><a class="navbar-item" href="/search">Search</a></a> <% } %> 
         </div>
       </div>
     </div>
@@ -45,7 +48,15 @@
               Log out
             </button>
           </form>
-          <% } %> <% if (userLevel === "admin") { %>
+          <% } %> 
+          <% if (userLevel === "request") { %>
+            <form class="form has-text-centered" method="post" action="/logout">
+              <button class="button is-info is-outlined mt-1" type="submit">
+                Log out
+              </button>
+            </form>
+            <% } %>
+          <% if (userLevel === "admin") { %>
           <form class="form has-text-centered" method="post" action="/logout">
             <button class="button is-info is-outlined mt-1" type="submit">
               Log out
@@ -62,7 +73,14 @@
             href="/dashboard"
             >Dashboard</a
           >
-          <% } %> <% if (userLevel === "admin") { %><a
+          <% } %> 
+          <% if (userLevel === "request") { %><a
+            class="button is-info is-outlined mt-1"
+            href="/dashboard"
+            >Dashboard</a
+          >
+          <% } %>
+          <% if (userLevel === "admin") { %><a
             class="button is-info is-outlined mt-1"
             href="/dashboard-admin"
             >Dashboard</a

@@ -22,9 +22,21 @@
       method="post"
       action="/dashboard/delete"
     >
-      <button class="button is-info is-outlined mt-1" type="submit">
-        Delete user
-      </button>
+    <% if (userLevel === "user") { %><button
+      class="button is-info is-outlined mt-1"
+      type="submit"
+    >
+      Delete user
+    </button>
+    <% } %>
+  </form>
+  <% if (userLevel === "request") { %><a
+    href="mailto:requestdeletion@email.com"
+    ><button class="button is-info is-outlined mt-1">
+      Request user deletion
+    </button></a
+  >
+  <% } %>
     </form>
   </div>
   <br />

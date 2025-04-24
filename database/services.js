@@ -92,7 +92,6 @@ async function authenticateUser(email, password) {
     return {
       success: true,
       email: user.email,
-      value: user.value,
       userLevel: user.user_level,
       userRef: user.user_ref,
     };
@@ -110,12 +109,33 @@ async function deleteUser(email) {
   connection.end();
 }
 
+async function removeUserByRef(userRef) {
+  const connection = await createConnection();
+
+  const deleteBistandQuary = "DELETE FROM user_request WHERE user_ref = ?";
+  await connection.execute(deleteBistandQuary, [userRef]);
+
+  const deleteUserQuary = "DELETE FROM user WHERE user_ref = ?";
+  await connection.execute(deleteUserQuary, [userRef]);
+
+  await connection.end();
+  return {
+    success: true,
+  };
+}
+
 async function userRequest(supportTicket, userRef, email) {
   const connection = await createConnection();
 
   connection.connect();
-  const addUserQuery = "INSERT INTO user_request (text, email) VALUES (?, ?)";
-  connection.execute(addUserQuery, [supportTicket, email]);
+
+  const userLevelQuary =
+    "UPDATE USER SET user_level = 'request' WHERE email = ?";
+  await connection.execute(userLevelQuary, [email]);
+
+  const addUserQuery =
+    "INSERT INTO user_request (text, email, user_ref) VALUES (?, ?, ?)";
+  await connection.execute(addUserQuery, [supportTicket, email, userRef]);
 
   connection.end();
   return true;
@@ -129,4 +149,5 @@ module.exports = {
   userRequest,
   allTickets,
   displayRequest,
+  removeUserByRef,
 };

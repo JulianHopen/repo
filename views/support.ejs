@@ -4,6 +4,14 @@
   <div class="container">
     <br />
     <h1 class="title">Support</h1>
+    <% if (userLevel === "user") { %>
+    <div class="box is-danger">
+      <p>
+        Users that sends in requests will not be able to delete their own
+        accounts and will be deleted only upon request
+      </p>
+    </div>
+    <% } %>
     <form class="form" method="post">
       <!-- <input
         class="textarea"

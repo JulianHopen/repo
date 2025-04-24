@@ -32,20 +32,7 @@
   <p>You're an admin</p>
   <% } %>
 </div>
-<br />
 <br /><br />
-<!-- <div class="columns is-multiline">
-  <% display.forEach(function(result){ %>
-  <div class="column">
-    <div class="box py-3"><%= result.email %></div>
-    <div class="box py-3"><%= result.password %></div>
-    <div class="box py-3"><%= result.user_ref %></div>
-    <div class="box py-3"><%= result.user_level %></div>
-    <hr />
-  </div>
-
-  <% }) %>
-</div> -->
 
 <div>
   <table class="table is-bordered is-hoverable">
@@ -57,7 +44,7 @@
     </thead>
     <!-- Table data taking the stored data and sorting it with forEach and displaying based on the parameter and the corresponding database colomn name -->
     <tr>
-      <% display.forEach(function(result){ %>
+      <% display.forEach(result => { %>
       <td><%= result.email %></td>
       <td><%= result.password %></td>
       <td><%= result.user_ref %></td>
