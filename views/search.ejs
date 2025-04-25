@@ -1,9 +1,15 @@
-<div class="columns is-multiline">
-  <% display.forEach(function(result){ %>
-  <div class="column">
-    <div class="box py-4 mx-3"><%= result.email %></div>
-    <hr />
-  </div>
-
-  <% }) %>
-</div>
+<!-- <br />
+<div class="columns is-centered">
+  <form class="form" method="post" style="width: 50%">
+    <input class="input" type="email" name="email" placeholder="Email" />
+    <button class="button is-info is-outlined mt-1" type="submit">
+      Search
+    </button>
+  </form>
+</div> -->
+<form class="form" for="name" method="post" action="/search/email">
+  <input class="input" type="email" name="email" placeholder="Email" />
+  <button class="button is-info is-outlined mt-1 is-inline" type="submit">
+    Submit
+  </button>
+</form>

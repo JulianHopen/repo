@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const { createConnection } = require("./database");
+const { isAdmin } = require("../middleware/authMiddleware");
 
 const saltRounds = 10;
 
@@ -15,11 +16,16 @@ async function allData() {
   return rows;
 }
 
-async function findUserByEmail(email) {
+async function SearchByEmail(email) {
   const connection = await createConnection();
   const query = "SELECT * FROM user WHERE email = ?";
   const [rows] = await connection.execute(query, [email]);
-  return rows[0];
+
+  return {
+    success: true,
+    rows,
+    search: email,
+  };
 }
 
 async function displayRequest(requestedEmail) {
@@ -150,4 +156,5 @@ module.exports = {
   allTickets,
   displayRequest,
   removeUserByRef,
+  SearchByEmail,
 };

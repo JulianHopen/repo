@@ -7,6 +7,7 @@ const {
   allTickets,
   displayRequest,
   removeUserByRef,
+  SearchByEmail,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -128,7 +129,13 @@ app.get("/dashboard-admin", isAuthenticated, isAdmin, async (req, res) => {
 });
 
 app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
-  const retrieveData = await allData();
+  let searchEmail = req.body.email;
+  if (SearchEmail) {
+    let retrieveData = await SearchByEmail(searchEmail);
+
+    return retrieveData;
+  }
+  console.log(searchEmail);
   res.render("search", {
     title: "Search",
     email: req.session.email,
@@ -136,6 +143,12 @@ app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
     userLevel: req.session.userLevel,
     display: retrieveData,
   });
+});
+
+app.post("/search/email", isAuthenticated, isAdmin, async (req, res) => {
+  let searchEmail = req.body.email;
+  await SearchByEmail(searchEmail);
+  res.redirect("/search");
 });
 
 app.post("/logout", isAuthenticated, (req, res) => {
@@ -149,12 +162,17 @@ app.post("/dashboard/delete", isAuthenticated, async (req, res) => {
   res.redirect("/login");
 });
 
-app.post("/dashboard/delete/:userRef", isAuthenticated, async (req, res) => {
-  const { userRef } = req.params;
+app.post(
+  "/dashboard/delete/:userRef",
+  isAuthenticated,
+  isAdmin,
+  async (req, res) => {
+    const { userRef } = req.params;
 
-  await removeUserByRef(userRef);
-  res.redirect("/dashboard-admin");
-});
+    await removeUserByRef(userRef);
+    res.redirect("/dashboard-admin");
+  }
+);
 
 app.get("/support", isAuthenticated, (req, res) => {
   res.render("support", {
