@@ -20,15 +20,15 @@
         <a class="navbar-link"> More </a>
 
         <div class="navbar-dropdown">
-          <a class="navbar-item" href="/signup"> Sign up </a>
-          <a class="navbar-item" href="/login"> Login </a>
+          <% if (!userLevel) { %><a class="navbar-item" href="/signup"> Sign up </a> <% } %> 
+          <% if (!userLevel) { %><a class="navbar-item" href="/login"> Login </a> <% } %> 
           <% if (userLevel === "user") { %><a class="navbar-item" href="/support">Support</a></a> <% } %> 
           <% if (userLevel === "request") { %><a class="navbar-item" href="/support">Support</a></a> <% } %> 
           <% if (userLevel === "admin" ) { %><a class="navbar-item" href="/support-admin">Support</a></a> <% } %> 
           <% if (userLevel === "user") { %><a class="navbar-item" href="/dashboard">Dashboard</a></a> <% } %> 
           <% if (userLevel === "request") { %><a class="navbar-item" href="/dashboard">Dashboard</a></a> <% } %> 
           <% if (userLevel === "admin") { %><a class="navbar-item" href="/dashboard-admin">Dashboard</a></a> <% } %> 
-          <% if (userLevel === "admin") { %><a class="navbar-item" href="/search">Search</a></a> <% } %> 
+          <% if (userLevel) { %><a class="navbar-item" href="/userdata">User</a></a> <% } %> 
         </div>
       </div>
     </div>

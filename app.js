@@ -8,6 +8,8 @@ const {
   displayRequest,
   removeUserByRef,
   SearchByEmail,
+  archiveRequest,
+  insertUserdata,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -128,29 +130,6 @@ app.get("/dashboard-admin", isAuthenticated, isAdmin, async (req, res) => {
   });
 });
 
-app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
-  let searchEmail = req.body.email;
-  if (SearchEmail) {
-    let retrieveData = await SearchByEmail(searchEmail);
-
-    return retrieveData;
-  }
-  console.log(searchEmail);
-  res.render("search", {
-    title: "Search",
-    email: req.session.email,
-    userRef: req.session.userRef,
-    userLevel: req.session.userLevel,
-    display: retrieveData,
-  });
-});
-
-app.post("/search/email", isAuthenticated, isAdmin, async (req, res) => {
-  let searchEmail = req.body.email;
-  await SearchByEmail(searchEmail);
-  res.redirect("/search");
-});
-
 app.post("/logout", isAuthenticated, (req, res) => {
   req.session.destroy();
   res.redirect("/login");
@@ -173,6 +152,38 @@ app.post(
     res.redirect("/dashboard-admin");
   }
 );
+
+app.get("/userdata", isAuthenticated, async (req, res) => {
+  res.render("userdata", {
+    title: "User",
+    email: req.session.email,
+    userRef: req.session.userRef,
+    userLevel: req.session.userLevel,
+  });
+});
+
+app.post("/userdata", isAuthenticated, async (req, res) => {
+  const { firstName, lastName, phoneNumber, address } = req.body;
+  const { email, userRef } = req.session;
+  console.log(email);
+  await insertUserdata(
+    email,
+    userRef,
+    firstName,
+    lastName,
+    phoneNumber,
+    address
+  );
+  res.redirect("userdata");
+});
+app.post("/updateuser", isAuthenticated, async (req, res) => {
+  const { firstName, lastName, phoneNumber, address } = req.body;
+  const { email } = req.session;
+  console.log(email);
+
+  await updateUser(firstName, lastName, phoneNumber, address, email);
+  res.render("userdata");
+});
 
 app.get("/support", isAuthenticated, (req, res) => {
   res.render("support", {
@@ -207,4 +218,11 @@ app.post("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
 });
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+});
+
+app.post("/support-admin/:id", isAuthenticated, isAdmin, async (req, res) => {
+  const { id } = req.params;
+
+  await archiveRequest(id);
+  res.redirect("/support-admin");
 });

@@ -3,13 +3,7 @@
   <br />
   <div class="container">
   <br />
-  <h1 class="title">Admin support panel overview</h1>
-  <form class="form" for="name" method="post" action="/search/email">
-    <input class="input" type="email" name="email" placeholder="Email" />
-    <button class="button is-info is-outlined mt-1 is-inline" type="submit">
-      Submit
-    </button>
-  </form>
+  <h1 class="title has-text-centered">Active ticket overview</h1>
 <br><br>
   <div class="columns">
     <% display.forEach(function(result){ %>
@@ -18,6 +12,9 @@
         <p> <%= result.email %>
         <br><br>
             <%= result.text %></p></div></a>
+            <form method="post" action="/support-admin/<%= result.id %>">
+              <button class="button" type="submit">Archive</button>
+            </form>
       <hr />
     </div>
   

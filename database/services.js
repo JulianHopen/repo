@@ -105,6 +105,54 @@ async function authenticateUser(email, password) {
   connection.end();
 }
 
+async function insertUserdata(
+  email,
+  userRef,
+  firstName,
+  lastName,
+  phoneNumber,
+  address
+) {
+  const connection = await createConnection();
+
+  connection.connect();
+  const insertedData = "true";
+
+  const insertUserData =
+    "INSERT INTO user_data (email, user_ref, first_name, last_name, phone_number, address, inserted) VALUES (?,?,?,?,?,?,?)";
+  await connection.execute(insertUserData, [
+    email,
+    userRef,
+    firstName,
+    lastName,
+    phoneNumber,
+    address,
+    insertedData,
+  ]);
+
+  connection.end();
+  return true;
+}
+
+async function updateUser(email, firstName, lastName, phoneNumber, address) {
+  const connection = await createConnection();
+
+  connection.connect();
+
+  const updateData =
+    "UPDATE user_data `first_name`=?, `last_name`=?, `phone_number`=?, `address`=? WHERE `email` = ?";
+  await connection.execute(updateData, [
+    email,
+    firstName,
+    lastName,
+    phoneNumber,
+    address,
+  ]);
+
+  connection.end();
+  return true;
+}
+
 async function deleteUser(email) {
   const connection = await createConnection();
 
@@ -118,8 +166,11 @@ async function deleteUser(email) {
 async function removeUserByRef(userRef) {
   const connection = await createConnection();
 
-  const deleteBistandQuary = "DELETE FROM user_request WHERE user_ref = ?";
-  await connection.execute(deleteBistandQuary, [userRef]);
+  const deleteSupportQuary = "DELETE FROM user_request WHERE user_ref = ?";
+  await connection.execute(deleteSupportQuary, [userRef]);
+
+  const deleteArchiveQuery = "DELETE FROM archived WHERE user_ref = ?";
+  await connection.execute(deleteArchiveQuery, [userRef]);
 
   const deleteUserQuary = "DELETE FROM user WHERE user_ref = ?";
   await connection.execute(deleteUserQuary, [userRef]);
@@ -147,6 +198,30 @@ async function userRequest(supportTicket, userRef, email) {
   return true;
 }
 
+async function archiveRequest(id) {
+  const connection = await createConnection();
+
+  const userArchiveQuery =
+    "INSERT INTO archived (text, user_ref, email) SELECT text, user_ref, email FROM user_request WHERE id = ?";
+  await connection.execute(userArchiveQuery, [id]);
+
+  const deleteUserQuery = "DELETE FROM user_request WHERE id = ?";
+  await connection.execute(deleteUserQuery, [id]);
+
+  connection.end();
+  return true;
+}
+
+// async function archiveRequest(id) {
+//   const connection = await createConnection();
+
+//   const userTextQuary = "UPDATE user_request SET archive = text WHERE id = ?";
+//   await connection.execute(userTextQuary, [id]);
+
+//   connection.end();
+//   return true;
+// }
+
 module.exports = {
   addUser,
   authenticateUser,
@@ -157,4 +232,7 @@ module.exports = {
   displayRequest,
   removeUserByRef,
   SearchByEmail,
+  archiveRequest,
+  insertUserdata,
+  updateUser,
 };
