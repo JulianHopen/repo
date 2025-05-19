@@ -19,6 +19,21 @@
 CREATE DATABASE IF NOT EXISTS `login` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `login`;
 
+-- Dumping structure for table login.archived
+CREATE TABLE IF NOT EXISTS `archived` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `text` varchar(2500) DEFAULT NULL,
+  `user_ref` varchar(255) DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_ref_archive` (`user_ref`),
+  KEY `email_archive` (`email`),
+  CONSTRAINT `email_archive` FOREIGN KEY (`email`) REFERENCES `user` (`email`),
+  CONSTRAINT `user_ref_archive` FOREIGN KEY (`user_ref`) REFERENCES `user` (`user_ref`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table login.user
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -29,7 +44,26 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `user_ref` (`user_ref`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table login.user_data
+CREATE TABLE IF NOT EXISTS `user_data` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `user_ref` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '0',
+  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '0',
+  `phone_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '0',
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '0',
+  `updated` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'false',
+  PRIMARY KEY (`id`),
+  KEY `email_data` (`email`),
+  KEY `user_ref_data` (`user_ref`),
+  CONSTRAINT `email_data` FOREIGN KEY (`email`) REFERENCES `user` (`email`),
+  CONSTRAINT `user_ref_data` FOREIGN KEY (`user_ref`) REFERENCES `user` (`user_ref`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -38,13 +72,13 @@ CREATE TABLE IF NOT EXISTS `user_request` (
   `id` int NOT NULL AUTO_INCREMENT,
   `text` varchar(2500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `user_ref` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_ref` (`user_ref`),
   KEY `email` (`email`) USING BTREE,
-  CONSTRAINT `FK_user_request_user` FOREIGN KEY (`user_ref`) REFERENCES `user` (`user_ref`),
-  CONSTRAINT `FK_user_request_user_2` FOREIGN KEY (`email`) REFERENCES `user` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `email` FOREIGN KEY (`email`) REFERENCES `user` (`email`),
+  CONSTRAINT `user_ref` FOREIGN KEY (`user_ref`) REFERENCES `user` (`user_ref`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
