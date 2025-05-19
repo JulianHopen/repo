@@ -123,8 +123,19 @@ async function updateUser(firstName, lastName, phoneNumber, address, email) {
     email,
   ]);
 
+  const setUpdate =
+    "UPDATE `login`.`user_data` SET updated ='true' WHERE email= ?";
+  await connection.execute(setUpdate, [email]);
+
+  const query = "SELECT * FROM `login`.`user_data` WHERE email = ?";
+  const [rows] = await connection.execute(query, [email]);
+  const user = await rows[0];
+
   connection.end();
-  return true;
+  return {
+    success: true,
+    updated: user.updated,
+  };
 }
 
 async function deleteUser(email) {

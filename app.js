@@ -154,10 +154,13 @@ app.post(
 );
 
 app.get("/userdata", isAuthenticated, async (req, res) => {
+  const sessionUpdate = req.session.updated;
   const data = await userData(req.session.email);
+  console.log(sessionUpdate);
   res.render("userdata", {
     title: "User",
     display: data,
+    updated: data,
     email: req.session.email,
     userRef: req.session.userRef,
     userLevel: req.session.userLevel,
@@ -167,16 +170,6 @@ app.get("/userdata", isAuthenticated, async (req, res) => {
 app.post("/userdata", isAuthenticated, async (req, res) => {
   const { firstName, lastName, phoneNumber, address } = req.body;
   const { email } = req.session;
-  console.log(email);
-  await updateUser(email, firstName, lastName, phoneNumber, address);
-  res.redirect("userdata");
-});
-
-app.post("/updateuser", isAuthenticated, async (req, res) => {
-  const { firstName, lastName, phoneNumber, address } = req.body;
-  const { email } = req.session;
-  console.log(email);
-
   await updateUser(firstName, lastName, phoneNumber, address, email);
   res.redirect("userdata");
 });

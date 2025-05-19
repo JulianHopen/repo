@@ -1,4 +1,6 @@
 <section>
+  <% display.forEach(data => { %> <% data.updated %> <% }) %>
+
   <br />
   <br />
   <div class="container">
@@ -39,7 +41,7 @@
   </div> -->
 
   <div>
-    <form class="form" style="width: 33%" method="post" action="/updateuser">
+    <form class="form" style="width: 33%" method="post" action="/userdata">
       <div class="field">
         <div class="label">
           <label for="name">First name</label>
@@ -57,7 +59,7 @@
           <label for="name">Phone number</label>
         </div>
         <div class="control">
-          <input class="input" placeholder=" 00 000 000" name="phoneNumber" />
+          <input class="input" placeholder=" 000 00 000" name="phoneNumber" />
         </div>
         <div class="label">
           <label for="name">Address</label>
@@ -70,6 +72,7 @@
     </form>
   </div>
   <br /><br />
+
   <div>
     <table class="table is-bordered is-hoverable">
       <thead>
@@ -87,6 +90,7 @@
         <td><%= result.last_name %></td>
         <td><%= result.phone_number %></td>
         <td><%= result.address %></td>
+        <td><%= result.updated %></td>
       </tr>
       <% }) %>
     </table>
