@@ -16,16 +16,15 @@ async function allData() {
   return rows;
 }
 
-async function SearchByEmail(email) {
+async function userData(email) {
   const connection = await createConnection();
-  const query = "SELECT * FROM user WHERE email = ?";
+
+  connection.connect();
+
+  const query = "SELECT * FROM `login`.`user_data` WHERE email = ?";
   const [rows] = await connection.execute(query, [email]);
 
-  return {
-    success: true,
-    rows,
-    search: email,
-  };
+  return rows;
 }
 
 async function displayRequest(requestedEmail) {
@@ -76,6 +75,10 @@ async function addUser(email, password) {
     DefaultuserLevel,
   ]);
 
+  const userDataQuery =
+    "INSERT INTO user_data (user_ref, email) SELECT user_ref, email FROM user";
+  await connection.execute(userDataQuery);
+
   connection.end();
   return true;
 }
@@ -105,48 +108,19 @@ async function authenticateUser(email, password) {
   connection.end();
 }
 
-async function insertUserdata(
-  email,
-  userRef,
-  firstName,
-  lastName,
-  phoneNumber,
-  address
-) {
-  const connection = await createConnection();
-
-  connection.connect();
-  const insertedData = "true";
-
-  const insertUserData =
-    "INSERT INTO user_data (email, user_ref, first_name, last_name, phone_number, address, inserted) VALUES (?,?,?,?,?,?,?)";
-  await connection.execute(insertUserData, [
-    email,
-    userRef,
-    firstName,
-    lastName,
-    phoneNumber,
-    address,
-    insertedData,
-  ]);
-
-  connection.end();
-  return true;
-}
-
-async function updateUser(email, firstName, lastName, phoneNumber, address) {
+async function updateUser(firstName, lastName, phoneNumber, address, email) {
   const connection = await createConnection();
 
   connection.connect();
 
   const updateData =
-    "UPDATE user_data `first_name`=?, `last_name`=?, `phone_number`=?, `address`=? WHERE `email` = ?";
+    "UPDATE `login`.`user_data` SET `first_name`=?, `last_name`=?, `phone_number`=?, `address`=? WHERE `email` = ?";
   await connection.execute(updateData, [
-    email,
     firstName,
     lastName,
     phoneNumber,
     address,
+    email,
   ]);
 
   connection.end();
@@ -212,6 +186,35 @@ async function archiveRequest(id) {
   return true;
 }
 
+// async function insertUserdata(
+//   email,
+//   userRef,
+//   firstName,
+//   lastName,
+//   phoneNumber,
+//   address
+// ) {
+//   const connection = await createConnection();
+
+//   connection.connect();
+//   const insertedData = "true";
+
+//   const insertUserData =
+//     "INSERT INTO user_data (email, user_ref, first_name, last_name, phone_number, address, inserted) VALUES (?,?,?,?,?,?,?)";
+//   await connection.execute(insertUserData, [
+//     email,
+//     userRef,
+//     firstName,
+//     lastName,
+//     phoneNumber,
+//     address,
+//     insertedData,
+//   ]);
+
+//   connection.end();
+//   return true;
+// }
+
 // async function archiveRequest(id) {
 //   const connection = await createConnection();
 
@@ -231,8 +234,7 @@ module.exports = {
   allTickets,
   displayRequest,
   removeUserByRef,
-  SearchByEmail,
   archiveRequest,
-  insertUserdata,
   updateUser,
+  userData,
 };

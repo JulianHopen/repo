@@ -7,9 +7,9 @@ const {
   allTickets,
   displayRequest,
   removeUserByRef,
-  SearchByEmail,
   archiveRequest,
-  insertUserdata,
+  updateUser,
+  userData,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -154,8 +154,10 @@ app.post(
 );
 
 app.get("/userdata", isAuthenticated, async (req, res) => {
+  const data = await userData(req.session.email);
   res.render("userdata", {
     title: "User",
+    display: data,
     email: req.session.email,
     userRef: req.session.userRef,
     userLevel: req.session.userLevel,
@@ -164,25 +166,19 @@ app.get("/userdata", isAuthenticated, async (req, res) => {
 
 app.post("/userdata", isAuthenticated, async (req, res) => {
   const { firstName, lastName, phoneNumber, address } = req.body;
-  const { email, userRef } = req.session;
+  const { email } = req.session;
   console.log(email);
-  await insertUserdata(
-    email,
-    userRef,
-    firstName,
-    lastName,
-    phoneNumber,
-    address
-  );
+  await updateUser(email, firstName, lastName, phoneNumber, address);
   res.redirect("userdata");
 });
+
 app.post("/updateuser", isAuthenticated, async (req, res) => {
   const { firstName, lastName, phoneNumber, address } = req.body;
   const { email } = req.session;
   console.log(email);
 
   await updateUser(firstName, lastName, phoneNumber, address, email);
-  res.render("userdata");
+  res.redirect("userdata");
 });
 
 app.get("/support", isAuthenticated, (req, res) => {

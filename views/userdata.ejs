@@ -6,7 +6,7 @@
     <h1 class="title">user <%= email %></h1>
     <br />
   </div>
-  <div>
+  <!-- <div>
     <form class="form" style="width: 33%" method="post" action="/userdata">
       <div class="field">
         <div class="label">
@@ -36,10 +36,10 @@
       </div>
       <button class="button mt-1" type="submit">Submit</button>
     </form>
-  </div>
+  </div> -->
 
   <div>
-    <form class="form" style="width: 33%" method="post" action="/userupdate">
+    <form class="form" style="width: 33%" method="post" action="/updateuser">
       <div class="field">
         <div class="label">
           <label for="name">First name</label>
@@ -69,4 +69,27 @@
       <button class="button mt-1" type="submit">Submit</button>
     </form>
   </div>
+  <br /><br />
+  <div>
+    <table class="table is-bordered is-hoverable">
+      <thead>
+        <th>Email</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Phone number</th>
+        <th>Address</th>
+      </thead>
+      <!-- Table data taking the stored data and sorting it with forEach and displaying based on the parameter and the corresponding database colomn name -->
+      <tr>
+        <% display.forEach(result => { %>
+        <td><%= result.email %></td>
+        <td><%= result.first_name %></td>
+        <td><%= result.last_name %></td>
+        <td><%= result.phone_number %></td>
+        <td><%= result.address %></td>
+      </tr>
+      <% }) %>
+    </table>
+  </div>
+  <br /><br />
 </section>
