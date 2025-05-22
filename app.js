@@ -10,6 +10,8 @@ const {
   archiveRequest,
   updateUser,
   userData,
+  isUpdated,
+  searchByEmail,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -130,6 +132,32 @@ app.get("/dashboard-admin", isAuthenticated, isAdmin, async (req, res) => {
   });
 });
 
+app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
+  const email = req.params;
+  // if (email) {
+  //   const filter = await searchByEmail(email);
+  //   console.log(filter);
+  //   req.session.destroy(function () {
+  //     req.session.search;
+  //   });
+  //   return filter;
+  // }
+  res.render("search", {
+    title: "search",
+    userLevel: req.session.userLevel,
+  });
+});
+
+app.post("/search", isAuthenticated, isAdmin, async (req, res) => {
+  let sessionSearch = req.body.search;
+  sessionSearch = req.params;
+  console.log(req.params);
+  // if (sessionSearch) {
+  //   req.session.search = sessionSearch;
+  // }
+  res.redirect("/search");
+});
+
 app.post("/logout", isAuthenticated, (req, res) => {
   req.session.destroy();
   res.redirect("/login");
@@ -154,13 +182,17 @@ app.post(
 );
 
 app.get("/userdata", isAuthenticated, async (req, res) => {
-  const sessionUpdate = req.session.updated;
-  const data = await userData(req.session.email);
-  console.log(sessionUpdate);
+  const { email } = req.session;
+  const data = await userData(email);
+  const updated = await isUpdated(email);
+  if (updated) {
+    req.session.updated = updated.updated;
+  }
+
   res.render("userdata", {
     title: "User",
-    display: data,
-    updated: data,
+    list: data,
+    updated: req.session.updated,
     email: req.session.email,
     userRef: req.session.userRef,
     userLevel: req.session.userLevel,

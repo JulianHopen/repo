@@ -27,6 +27,33 @@ async function userData(email) {
   return rows;
 }
 
+async function searchByEmail(email) {
+  const connection = await createConnection();
+
+  connection.connect();
+
+  const query = "SELECT * FROM user_request WHERE email = ?";
+  const [rows] = await connection.execute(query, [email]);
+
+  connection.end();
+  return { success: true, rows };
+}
+
+async function isUpdated(email) {
+  const connection = await createConnection();
+
+  connection.connect();
+
+  const query = "SELECT * FROM `login`.`user_data` WHERE email = ?";
+  const [rows] = await connection.execute(query, [email]);
+  const user = await rows[0];
+
+  return {
+    success: true,
+    updated: user.updated,
+  };
+}
+
 async function displayRequest(requestedEmail) {
   const connection = await createConnection();
 
@@ -154,6 +181,9 @@ async function removeUserByRef(userRef) {
   const deleteSupportQuary = "DELETE FROM user_request WHERE user_ref = ?";
   await connection.execute(deleteSupportQuary, [userRef]);
 
+  const deleteUserData = "DELETE FROM user_data WHERE user_ref = ?";
+  await connection.execute(deleteUserData, [userRef]);
+
   const deleteArchiveQuery = "DELETE FROM archived WHERE user_ref = ?";
   await connection.execute(deleteArchiveQuery, [userRef]);
 
@@ -248,4 +278,6 @@ module.exports = {
   archiveRequest,
   updateUser,
   userData,
+  isUpdated,
+  searchByEmail,
 };

@@ -1,6 +1,4 @@
 <section>
-  <% display.forEach(data => { %> <% data.updated %> <% }) %>
-
   <br />
   <br />
   <div class="container">
@@ -72,7 +70,7 @@
     </form>
   </div>
   <br /><br />
-
+  <% if (updated === "true") { %>
   <div>
     <table class="table is-bordered is-hoverable">
       <thead>
@@ -82,18 +80,18 @@
         <th>Phone number</th>
         <th>Address</th>
       </thead>
-      <!-- Table data taking the stored data and sorting it with forEach and displaying based on the parameter and the corresponding database colomn name -->
       <tr>
-        <% display.forEach(result => { %>
+        <% list.forEach(result => { %>
         <td><%= result.email %></td>
         <td><%= result.first_name %></td>
         <td><%= result.last_name %></td>
         <td><%= result.phone_number %></td>
         <td><%= result.address %></td>
-        <td><%= result.updated %></td>
       </tr>
       <% }) %>
     </table>
   </div>
+  <% } %>
+
   <br /><br />
 </section>

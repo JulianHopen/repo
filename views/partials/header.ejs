@@ -29,6 +29,7 @@
           <% if (userLevel === "request") { %><a class="navbar-item" href="/dashboard">Dashboard</a></a> <% } %> 
           <% if (userLevel === "admin") { %><a class="navbar-item" href="/dashboard-admin">Dashboard</a></a> <% } %> 
           <% if (userLevel) { %><a class="navbar-item" href="/userdata">User</a></a> <% } %> 
+          <% if (userLevel === "admin" ) { %><a class="navbar-item" href="/search">Search</a></a> <% } %> 
         </div>
       </div>
     </div>
