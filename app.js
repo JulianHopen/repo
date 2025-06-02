@@ -11,7 +11,7 @@ const {
   updateUser,
   userData,
   isUpdated,
-  searchByEmail,
+  addAdmin,
 } = require("./database/services");
 
 const { isAuthenticated, isAdmin } = require("./middleware/authMiddleware");
@@ -53,6 +53,14 @@ app.get("/signup", (req, res) => {
   res.render("signup", locals);
 });
 
+app.get("/signup-admin", (req, res) => {
+  const locals = {
+    title: "Signup admin",
+    userLevel: req.session.userLevel,
+  };
+  res.render("signupadmin", locals);
+});
+
 app.get("/login", (req, res) => {
   const locals = {
     title: "Login",
@@ -87,6 +95,32 @@ app.post("/signup", async (req, res) => {
   return res.redirect("/login");
 });
 
+app.post("/signup-admin", async (req, res) => {
+  const { email, password } = req.body;
+
+  const strongPassword = validator.isStrongPassword(password, {
+    minLength: 3,
+    minLowercase: 0,
+    minUppercase: 0,
+    minNumbers: 0,
+    minSymbols: 0,
+  });
+
+  if (!strongPassword) {
+    console.log(validator.isStrongPassword(password));
+    return res.redirect("/signup-admin");
+  }
+
+  const emailChecker = await addAdmin(email, password);
+
+  if (!emailChecker) {
+    console.log("Email is already in use");
+    return res.redirect("/signup-admin");
+  }
+
+  return res.redirect("/dashboard-admin");
+});
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -112,6 +146,7 @@ app.post("/login", async (req, res) => {
 
 app.get("/dashboard", isAuthenticated, async (req, res) => {
   const request = await displayRequest(req.session.email);
+  console.log(request);
   res.render("dashboard", {
     title: "Dashboard",
     display: request,
@@ -132,31 +167,16 @@ app.get("/dashboard-admin", isAuthenticated, isAdmin, async (req, res) => {
   });
 });
 
-app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
-  const email = req.params;
-  // if (email) {
-  //   const filter = await searchByEmail(email);
-  //   console.log(filter);
-  //   req.session.destroy(function () {
-  //     req.session.search;
-  //   });
-  //   return filter;
-  // }
-  res.render("search", {
-    title: "search",
-    userLevel: req.session.userLevel,
-  });
-});
-
-app.post("/search", isAuthenticated, isAdmin, async (req, res) => {
-  let sessionSearch = req.body.search;
-  sessionSearch = req.params;
-  console.log(req.params);
-  // if (sessionSearch) {
-  //   req.session.search = sessionSearch;
-  // }
-  res.redirect("/search");
-});
+// app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
+//   if (req.query.email) {
+//     req.session.query = req.query.email;
+//     return res.redirect("/result");
+//   }
+//   res.render("search", {
+//     title: "search",
+//     userLevel: req.session.userLevel,
+//   });
+// });
 
 app.post("/logout", isAuthenticated, (req, res) => {
   req.session.destroy();
@@ -175,7 +195,7 @@ app.post(
   isAdmin,
   async (req, res) => {
     const { userRef } = req.params;
-
+    console.log(userRef);
     await removeUserByRef(userRef);
     res.redirect("/dashboard-admin");
   }
@@ -223,11 +243,28 @@ app.post("/support", isAuthenticated, async (req, res) => {
 
 app.get("/support-admin", isAuthenticated, isAdmin, async (req, res) => {
   const data = await allTickets();
+
+  if (req.query.email) {
+    req.session.query = req.query.email;
+    return res.redirect("/search");
+  }
+
   res.render("adminsupport", {
     title: "Admin support panel",
     display: data,
     email: req.session.email,
     userRef: req.session.userRef,
+    userLevel: req.session.userLevel,
+  });
+});
+
+app.get("/search", isAuthenticated, isAdmin, async (req, res) => {
+  const { query } = req.session;
+  const filter = await displayRequest(query);
+  console.log(filter);
+  res.render("search", {
+    title: "search",
+    list: filter,
     userLevel: req.session.userLevel,
   });
 });
@@ -242,6 +279,13 @@ app.listen(port, () => {
 });
 
 app.post("/support-admin/:id", isAuthenticated, isAdmin, async (req, res) => {
+  const { id } = req.params;
+
+  await archiveRequest(id);
+  res.redirect("/support-admin");
+});
+
+app.post("/search/:id", isAuthenticated, isAdmin, async (req, res) => {
   const { id } = req.params;
 
   await archiveRequest(id);

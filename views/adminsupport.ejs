@@ -3,7 +3,17 @@
   <br />
   <div class="container">
   <br />
-  <h1 class="title has-text-centered">Active ticket overview</h1>
+  <h1 class="title has-text-centered">All ticket overview</h1>
+  <br>
+  <div class="container" style="width: 33%">
+<form class="form has-text-centered" for="name" method="get" name="email">
+  <input class="input" name="email" value="" placeholder="Email" />
+  <button class="button is-info is-outlined mt-1 is-outlined" type="submit">
+    Submit
+  </button>
+</form>
+</div>
+
 <br><br>
   <div class="columns">
     <% display.forEach(function(result){ %>
@@ -12,10 +22,9 @@
         <p> <%= result.email %>
         <br><br>
             <%= result.text %></p></div></a>
-            <form method="post" action="/support-admin/<%= result.id %>">
+            <form class="has-text-centered" method="post" action="/support-admin/<%= result.id %>">
               <button class="button" type="submit">Archive</button>
             </form>
-      <hr />
     </div>
   
     <% }) %>

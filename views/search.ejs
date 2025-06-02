@@ -1,6 +1,34 @@
-<form class="form" for="name" method="post" action="/search">
-  <input class="input" type="email" name="search" placeholder="Email" />
+
+<section>
+  <br />
+  <br />
+  <div class="container">
+  <br />
+  <h1 class="title has-text-centered">Filtered ticket overview</h1>
+  <br>
+  <div class="container" style="width: 33%">
+<form class="form has-text-centered" for="name" method="get" name="email" action="/support-admin">
+  <input class="input" name="email" value="" placeholder="Email" />
   <button class="button is-info is-outlined mt-1 is-outlined" type="submit">
     Submit
   </button>
-</form>
+</form></div>
+
+<br><br>
+
+<% if (list) { %>
+<div class="columns is-multiline">
+  <% list.forEach(function(result){ %>
+  <div class="column"><div class="box">
+      <a href="mailto:<%= result.email %>">
+        <p> <%= result.email %>
+        <br><br>
+            <%= result.text %></p></div></a><div>
+            <form class="has-text-centered" method="post" action="/search/<%= result.id %>">
+              <button class="button" type="submit">Archive</button>
+            </form></div>
+    </div>
+  <% }) %>
+</div>
+<% } %>
+</section>

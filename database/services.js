@@ -27,18 +27,6 @@ async function userData(email) {
   return rows;
 }
 
-async function searchByEmail(email) {
-  const connection = await createConnection();
-
-  connection.connect();
-
-  const query = "SELECT * FROM user_request WHERE email = ?";
-  const [rows] = await connection.execute(query, [email]);
-
-  connection.end();
-  return { success: true, rows };
-}
-
 async function isUpdated(email) {
   const connection = await createConnection();
 
@@ -92,6 +80,41 @@ async function addUser(email, password) {
   const hashedPassword = await bcrypt.hashSync(password, saltRounds);
   const userRef = md5Hash;
   const DefaultuserLevel = "user";
+
+  const addUserQuery =
+    "INSERT INTO user (email, password, user_ref, user_level) VALUES (?,?,?,?)";
+  connection.execute(addUserQuery, [
+    email,
+    hashedPassword,
+    userRef,
+    DefaultuserLevel,
+  ]);
+
+  const userDataQuery =
+    "INSERT INTO user_data (user_ref, email) SELECT user_ref, email FROM user";
+  await connection.execute(userDataQuery);
+
+  connection.end();
+  return true;
+}
+
+async function addAdmin(email, password) {
+  const connection = await createConnection();
+
+  const randomBytes = crypto.randomBytes(32);
+  const md5Hash = crypto.createHash("md5").update(randomBytes).digest("hex");
+  connection.connect();
+
+  const FindUserQuery = "SELECT * FROM user WHERE email = ?";
+  const [rows] = await connection.execute(FindUserQuery, [email]);
+  const user = await rows[0];
+
+  if (user) {
+    return false;
+  }
+  const hashedPassword = await bcrypt.hashSync(password, saltRounds);
+  const userRef = md5Hash;
+  const DefaultuserLevel = "admin";
 
   const addUserQuery =
     "INSERT INTO user (email, password, user_ref, user_level) VALUES (?,?,?,?)";
@@ -279,5 +302,5 @@ module.exports = {
   updateUser,
   userData,
   isUpdated,
-  searchByEmail,
+  addAdmin,
 };
